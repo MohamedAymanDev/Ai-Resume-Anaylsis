@@ -3,34 +3,21 @@ import chromadb
 
 CHROMA_PATH = "data/chroma"
 
-
-client = chromadb.PersistentClient(
-    path=CHROMA_PATH
-)
-
+client = chromadb.PersistentClient(path=CHROMA_PATH)
 
 collection = client.get_or_create_collection(
     name="resume_knowledge"
 )
 
 
-def add_documents(
-    chunks: list[dict],
-    embeddings,
-):
+def add_documents(chunks: list[dict], embeddings):
     ids = []
     documents = []
     metadatas = []
 
     for index, chunk in enumerate(chunks):
-
-        ids.append(
-            f"{chunk['source']}_{chunk['chunk_id']}"
-        )
-
-        documents.append(
-            chunk["text"]
-        )
+        ids.append(f"{chunk['source']}_{chunk['chunk_id']}")
+        documents.append(chunk["text"])
 
         metadatas.append(
             {
@@ -40,7 +27,7 @@ def add_documents(
             }
         )
 
-    collection.add(
+    collection.upsert(
         ids=ids,
         documents=documents,
         embeddings=embeddings.tolist(),

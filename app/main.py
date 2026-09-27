@@ -1,12 +1,15 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import Settings
 from app.db.database import create_tables
+
 from app.api.auth import router as auth_router
 from app.api.resumes import router as resumes_router
 from app.api.jobs import router as jobs_router
 from app.api.matching import router as matching_router
 from app.api.career import router as career_router
+
 
 create_tables()
 
@@ -16,11 +19,28 @@ app = FastAPI(
     description="AI-powered Resume Analysis and Career Intelligence Platform",
     version=Settings.APP_VERSION,
 )
+
+
+# Allow frontend to communicate with FastAPI
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://127.0.0.1:5500",
+        "http://localhost:5500",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
 app.include_router(auth_router)
 app.include_router(resumes_router)
 app.include_router(jobs_router)
 app.include_router(matching_router)
 app.include_router(career_router)
+
+
 @app.get("/")
 def root():
     return {

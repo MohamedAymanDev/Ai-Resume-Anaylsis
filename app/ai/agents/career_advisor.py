@@ -1,3 +1,5 @@
+import json
+
 from langchain_groq import ChatGroq
 
 from app.core.config import settings
@@ -21,18 +23,22 @@ Important rules:
 - Do not claim that the candidate has a skill unless it appears
   in the resume.
 - Recommendations should be relevant to the target job.
-- Return ALL six fields.
-- If a field has no items, return an empty list.
-- Keep recommendations practical and specific.
+- Return valid JSON only.
+- Do not use Markdown.
+- Do not wrap the JSON in ```json or ```.
 
-You MUST return:
+The JSON MUST contain exactly these six fields:
 
-1. strengths
-2. weaknesses
-3. missing_skills
-4. improvement_suggestions
-5. recommended_certifications
-6. learning_resources
+{{
+    "strengths": [],
+    "weaknesses": [],
+    "missing_skills": [],
+    "improvement_suggestions": [],
+    "recommended_certifications": [],
+    "learning_resources": []
+}}
+
+If a field has no items, return an empty list.
 
 Resume Analysis:
 {resume_analysis}
@@ -52,10 +58,12 @@ class CareerAdvisor:
         self.model = ChatGroq(
             model=settings.LLM_MODEL,
             api_key=settings.LLM_API_KEY,
-        )
-
-        self.structured_model = self.model.with_structured_output(
-            CareerAdvice
+            temperature=0,
+            model_kwargs={
+                "response_format": {
+                    "type": "json_object"
+                }
+            },
         )
 
     def advise(
@@ -63,6 +71,10 @@ class CareerAdvisor:
         resume_analysis: str,
         job_information: str,
     ) -> tuple[CareerAdvice, list[str]]:
+
+        # =========================
+        # 1. Build RAG Query
+        # =========================
 
         query = f"""
         Career advice for this resume and target job.
@@ -74,10 +86,18 @@ class CareerAdvisor:
         {job_information}
         """
 
+        # =========================
+        # 2. Retrieve Knowledge
+        # =========================
+
         retrieved_context, sources = get_relevant_context(
-        query=query,
-        top_k=5,
+            query=query,
+            top_k=5,
         )
+
+        # =========================
+        # 3. Build Prompt
+        # =========================
 
         prompt = CAREER_ADVISOR_PROMPT.format(
             resume_analysis=resume_analysis,
@@ -85,6 +105,59 @@ class CareerAdvisor:
             retrieved_context=retrieved_context,
         )
 
-        advice = self.structured_model.invoke(prompt)
+        # =========================
+        # 4. Ask LLM
+        # =========================
+
+        response = self.model.invoke(prompt)
+
+        # =========================
+        # 5. Get Response Text
+        # =========================
+
+        response_text = response.content
+
+        # =========================
+        # 6. Remove Markdown Fences
+        # =========================
+
+        response_text = response_text.strip()
+
+        if response_text.startswith("```"):
+            response_text = response_text.replace(
+                "```json",
+                "",
+            )
+
+            response_text = response_text.replace(
+                "```",
+                "",
+            )
+
+            response_text = response_text.strip()
+
+        # =========================
+        # 7. Parse JSON
+        # =========================
+
+        try:
+            advice_data = json.loads(response_text)
+
+        except json.JSONDecodeError as exc:
+            raise ValueError(
+                "Career Advisor returned invalid JSON"
+            ) from exc
+
+        # =========================
+        # 8. Validate with Pydantic
+        # =========================
+
+        advice = CareerAdvice.model_validate(
+            advice_data
+        )
+
+        # =========================
+        # 9. Return Advice + Sources
+        # =========================
 
         return advice, sources

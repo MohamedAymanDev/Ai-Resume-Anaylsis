@@ -5,13 +5,13 @@ from sqlalchemy.orm import Session
 
 from app.api.auth import get_current_user, get_db
 from app.db.models import Job, Resume, ResumeAnalysis, User
-from app.ai.agents.career_advisor import CareerAdvisor
 from app.schemas.career import CareerAdviceResponse
+from app.ai.agents.career_advisor import CareerAdvisor
 
 
 router = APIRouter(
     prefix="/career",
-    tags=["Career Advisor"],
+    tags=["Career"],
 )
 
 
@@ -25,6 +25,10 @@ def get_career_advice(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
+    # =========================
+    # 1. Get Resume
+    # =========================
+
     resume = (
         db.query(Resume)
         .filter(
@@ -40,17 +44,27 @@ def get_career_advice(
             detail="Resume not found",
         )
 
-    analysis = (
+    # =========================
+    # 2. Get Resume Analysis
+    # =========================
+
+    resume_analysis = (
         db.query(ResumeAnalysis)
-        .filter(ResumeAnalysis.resume_id == resume.id)
+        .filter(
+            ResumeAnalysis.resume_id == resume.id
+        )
         .first()
     )
 
-    if analysis is None:
+    if resume_analysis is None:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Resume has not been analyzed yet",
         )
+
+    # =========================
+    # 3. Get Job
+    # =========================
 
     job = (
         db.query(Job)
@@ -64,30 +78,65 @@ def get_career_advice(
             detail="Job not found",
         )
 
-    resume_analysis = {
-        "summary": analysis.summary,
-        "technical_skills": json.loads(analysis.technical_skills),
-        "soft_skills": json.loads(analysis.soft_skills),
-        "education": json.loads(analysis.education),
-        "experience": json.loads(analysis.experience),
+    # =========================
+    # 4. Prepare Resume Analysis
+    # =========================
+
+    resume_analysis_data = {
+        "summary": resume_analysis.summary,
+        "technical_skills": json.loads(
+            resume_analysis.technical_skills
+        ),
+        "soft_skills": json.loads(
+            resume_analysis.soft_skills
+        ),
+        "education": json.loads(
+            resume_analysis.education
+        ),
+        "experience": json.loads(
+            resume_analysis.experience
+        ),
     }
+
+    # =========================
+    # 5. Prepare Job Information
+    # =========================
 
     job_information = {
         "title": job.title,
         "company": job.company,
+        "location": job.location,
         "description": job.description,
-        "required_skills": json.loads(job.required_skills),
-        "preferred_skills": json.loads(job.preferred_skills or "[]"),
+        "required_skills": json.loads(
+            job.required_skills
+        ),
+        "preferred_skills": json.loads(
+            job.preferred_skills or "[]"
+        ),
         "experience_level": job.experience_level,
         "education": job.education,
     }
 
+    # =========================
+    # 6. Run Career Advisor
+    # =========================
+
     advisor = CareerAdvisor()
 
     advice, sources = advisor.advise(
-    resume_analysis=json.dumps(resume_analysis),
-    job_information=json.dumps(job_information),
-)
+        resume_analysis=json.dumps(
+            resume_analysis_data,
+            ensure_ascii=False,
+        ),
+        job_information=json.dumps(
+            job_information,
+            ensure_ascii=False,
+        ),
+    )
+
+    # =========================
+    # 7. Return Response
+    # =========================
 
     return CareerAdviceResponse(
         advice=advice,

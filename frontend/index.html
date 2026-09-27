@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | AI Resume Analyzer</title>
+
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+
+        <div class="logo">
+            AI Resume Analyzer
+        </div>
+
+        <div class="user-info">
+
+            <span id="userName">
+                Loading...
+            </span>
+
+            <button id="logoutBtn" class="logout-btn">
+                Logout
+            </button>
+
+        </div>
+
+    </nav>
+
+
+    <!-- Dashboard Navigation -->
+    <nav class="dashboard-nav">
+
+        <button
+            class="nav-tab active"
+            data-section="resumeSection"
+        >
+            📄 Resume
+        </button>
+
+        <button
+            class="nav-tab"
+            data-section="analysisSection"
+        >
+            🤖 Analysis
+        </button>
+
+        <button
+            class="nav-tab"
+            data-section="jobsSection"
+        >
+            🎯 Job Matching
+        </button>
+
+        <button
+            class="nav-tab"
+            data-section="careerSection"
+        >
+            🚀 Career Advice
+        </button>
+        <button
+            class="nav-tab"
+            data-section="manageJobsSection">
+            🗂️ Manage Jobs
+        </button>
+
+    </nav>
+
+
+    <!-- Main Dashboard -->
+    <main class="dashboard">
+
+        <!-- Welcome -->
+        <section class="welcome-section">
+
+            <h1>
+                Welcome 👋
+            </h1>
+
+            <p>
+                Analyze your resume and discover suitable career opportunities.
+            </p>
+
+        </section>
+
+
+        <!-- Resume Section -->
+        <section
+            id="resumeSection"
+            class="dashboard-section active-section"
+        >
+
+            <div class="dashboard-card">
+
+                <h2>
+                    📄 Upload Your Resume
+                </h2>
+
+                <p>
+                    Upload your PDF or DOCX resume and analyze it using AI.
+                </p>
+
+                <input
+                    type="file"
+                    id="resumeFile"
+                    accept=".pdf,.docx"
+                >
+
+                <button id="uploadBtn">
+                    Upload Resume
+                </button>
+
+                <button
+                    id="analyzeBtn"
+                    disabled
+                >
+                    Analyze Resume
+                </button>
+
+                <p id="uploadMessage"></p>
+
+            </div>
+
+        </section>
+
+
+        <!-- Analysis Section -->
+        <section
+            id="analysisSection"
+            class="dashboard-section"
+        >
+
+            <div class="analysis-section">
+
+                <h2>
+                    🤖 Resume Analysis
+                </h2>
+
+                <p>
+                    AI-extracted information from your resume.
+                </p>
+
+                <div id="analysisContent">
+
+                    <p class="empty-message">
+                        Upload and analyze your resume to see the results.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Job Matching Section -->
+        <section
+            id="jobsSection"
+            class="dashboard-section"
+        >
+
+            <div class="analysis-section">
+
+                <h2>
+                    🎯 Job Matching
+                </h2>
+
+                <p>
+                    Search for jobs and see how well your resume matches each position.
+                </p>
+
+
+                <div class="job-search-form">
+
+                    <input
+                        type="text"
+                        id="jobSearch"
+                        placeholder="Search jobs (e.g. Machine Learning)"
+                    >
+
+                    <input
+                        type="text"
+                        id="locationSearch"
+                        placeholder="Location (e.g. Cairo)"
+                    >
+
+                    <button id="searchJobsBtn">
+                        Find Jobs
+                    </button>
+
+                </div>
+
+
+                <p id="jobSearchMessage"></p>
+
+
+                <div id="jobResults">
+
+                    <p class="empty-message">
+                        Search for jobs to see matching results.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Career Advice Section -->
+        <section
+            id="careerSection"
+            class="dashboard-section"
+        >
+
+            <div class="analysis-section">
+
+                <h2>
+                    🚀 AI Career Advisor
+                </h2>
+
+                <p>
+                    Get AI-powered recommendations based on your resume,
+                    target job, and knowledge base.
+                </p>
+
+                <div id="careerAdviceContent">
+
+                    <p class="empty-message">
+                        Search for a job and click
+                        "Get Career Advice" to receive personalized recommendations.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <section
+    id="manageJobsSection"
+    class="dashboard-section"
+>
+
+    <div class="analysis-section">
+
+        <h2>🗂️ Job Management</h2>
+
+        <p>
+            Create, edit, and delete job opportunities.
+        </p>
+
+
+        <!-- Add Job Form -->
+
+        <div class="job-form">
+
+            <h3>➕ Add New Job</h3>
+
+            <input
+                type="text"
+                id="jobTitle"
+                placeholder="Job Title"
+            >
+
+            <input
+                type="text"
+                id="jobCompany"
+                placeholder="Company"
+            >
+
+            <input
+                type="text"
+                id="jobLocation"
+                placeholder="Location"
+            >
+
+            <textarea
+                id="jobDescription"
+                placeholder="Job Description"
+            ></textarea>
+
+            <input
+                type="text"
+                id="requiredSkills"
+                placeholder="Required Skills: Python, SQL, Machine Learning"
+            >
+
+            <input
+                type="text"
+                id="preferredSkills"
+                placeholder="Preferred Skills: TensorFlow, FastAPI"
+            >
+
+            <input
+                type="text"
+                id="experienceLevel"
+                placeholder="Experience Level: Internship"
+            >
+
+            <input
+                type="text"
+                id="jobEducation"
+                placeholder="Education: Computer Science or AI"
+            >
+
+            <button id="addJobBtn">
+                Add Job
+            </button>
+
+            <p id="jobManagementMessage"></p>
+
+        </div>
+
+
+        <!-- Jobs List -->
+
+        <div class="jobs-management">
+
+            <div class="jobs-header">
+
+                <h3>📋 Available Jobs</h3>
+
+                <button
+                    id="loadJobsBtn"
+                    class="secondary-btn"
+                >
+                    Refresh Jobs
+                </button>
+
+            </div>
+
+            <div id="managedJobs">
+
+                <p class="empty-message">
+                    Click "Refresh Jobs" to load jobs.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+    </main>
+
+
+    <script src="./js/dashboard.js"></script>
+
+</body>
+
+</html>
