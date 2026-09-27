@@ -4,6 +4,8 @@ from app.core.config import Settings
 from app.db.database import create_tables
 from app.api.auth import router as auth_router
 from app.api.resumes import router as resumes_router
+from app.api.jobs import router as jobs_router
+
 create_tables()
 
 
@@ -14,6 +16,7 @@ app = FastAPI(
 )
 app.include_router(auth_router)
 app.include_router(resumes_router)
+app.include_router(jobs_router)
 @app.get("/")
 def root():
     return {

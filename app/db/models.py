@@ -121,3 +121,54 @@ class ResumeAnalysis(Base):
         default=lambda: datetime.now(timezone.utc),
         nullable=False,
     )    
+
+class Job(Base):
+    __tablename__ = "jobs"
+
+    id: Mapped[int] = mapped_column(
+        primary_key=True,
+        index=True,
+    )
+
+    title: Mapped[str] = mapped_column(
+        String(255),
+        nullable=False,
+    )
+
+    company: Mapped[str] = mapped_column(
+        String(255),
+        nullable=False,
+    )
+
+    location: Mapped[str] = mapped_column(
+        String(255),
+        nullable=True,
+    )
+
+    description: Mapped[str] = mapped_column(
+        nullable=False,
+    )
+
+    required_skills: Mapped[str] = mapped_column(
+        nullable=False,
+    )
+
+    preferred_skills: Mapped[str] = mapped_column(
+        nullable=True,
+    )
+
+    experience_level: Mapped[str] = mapped_column(
+        String(100),
+        nullable=True,
+    )
+
+    education: Mapped[str] = mapped_column(
+        String(255),
+        nullable=True,
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=lambda: datetime.now(timezone.utc),
+        nullable=False,
+    )    
