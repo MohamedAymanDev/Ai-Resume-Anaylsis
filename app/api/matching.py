@@ -21,7 +21,7 @@ from app.services.job_matcher import (
     calculate_experience_match,
     calculate_education_match,
 )
-
+from app.services.scoring import calculate_final_match_score
 router = APIRouter(
     prefix="/matching",
     tags=["Job Matching"],
@@ -107,12 +107,11 @@ def match_resume_with_job(
     job.education,
     )
 
-    final_match_score = round(
-     (skill_match_score * 0.45)
-    + (semantic_similarity_score * 0.30)
-    + (experience_match_score * 0.15)
-    + (education_match_score * 0.10),
-    2,
+    final_match_score = calculate_final_match_score(
+    skill_match_score=skill_match_score,
+    semantic_similarity_score=semantic_similarity_score,
+    experience_match_score=experience_match_score,
+    education_match_score=education_match_score,
     )
 
     return JobMatchResponse(
