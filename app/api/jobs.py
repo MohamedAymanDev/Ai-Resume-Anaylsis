@@ -1,11 +1,11 @@
 import json
 
-from fastapi import APIRouter, Depends, status,HTTPException
+from fastapi import APIRouter, Depends, status, HTTPException, Query
 from sqlalchemy.orm import Session
 
 from app.api.auth import get_current_user, get_db
 from app.db.models import Job, User
-from app.schemas.job import JobCreate, JobResponse,JobUpdate
+from app.schemas.job import JobCreate, JobResponse, JobUpdate
 
 
 router = APIRouter(
@@ -13,6 +13,10 @@ router = APIRouter(
     tags=["Jobs"],
 )
 
+
+# =========================
+# Create Job
+# =========================
 
 @router.post(
     "/",
@@ -53,12 +57,17 @@ def create_job(
             job.required_skills
         ),
         preferred_skills=json.loads(
-            job.preferred_skills
+            job.preferred_skills or "[]"
         ),
         experience_level=job.experience_level,
         education=job.education,
         created_at=job.created_at,
     )
+
+
+# =========================
+# Get All Jobs
+# =========================
 
 @router.get(
     "/",
@@ -89,6 +98,74 @@ def get_jobs(
         )
         for job in jobs
     ]
+
+
+# =========================
+# Search Jobs
+# IMPORTANT:
+# This route MUST be before /{job_id}
+# =========================
+
+@router.get(
+    "/search",
+    response_model=list[JobResponse],
+)
+def search_jobs(
+    q: str | None = Query(default=None),
+    location: str | None = Query(default=None),
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    query = db.query(Job)
+
+    # Search by title, company, or description
+    if q:
+        search_term = f"%{q.lower()}%"
+
+        query = query.filter(
+            (
+                Job.title.ilike(search_term)
+                | Job.company.ilike(search_term)
+                | Job.description.ilike(search_term)
+            )
+        )
+
+    # Filter by location
+    if location:
+        query = query.filter(
+            Job.location.ilike(f"%{location}%")
+        )
+
+    jobs = query.all()
+
+    results = []
+
+    for job in jobs:
+        results.append(
+            JobResponse(
+                id=job.id,
+                title=job.title,
+                company=job.company,
+                location=job.location,
+                description=job.description,
+                required_skills=json.loads(
+                    job.required_skills
+                ),
+                preferred_skills=json.loads(
+                    job.preferred_skills or "[]"
+                ),
+                experience_level=job.experience_level,
+                education=job.education,
+                created_at=job.created_at,
+            )
+        )
+
+    return results
+
+
+# =========================
+# Get One Job
+# =========================
 
 @router.get(
     "/{job_id}",
@@ -127,6 +204,11 @@ def get_job(
         education=job.education,
         created_at=job.created_at,
     )
+
+
+# =========================
+# Update Job
+# =========================
 
 @router.put(
     "/{job_id}",
@@ -196,7 +278,12 @@ def update_job(
         experience_level=job.experience_level,
         education=job.education,
         created_at=job.created_at,
-    )            
+    )
+
+
+# =========================
+# Delete Job
+# =========================
 
 @router.delete(
     "/{job_id}",
@@ -220,4 +307,6 @@ def delete_job(
         )
 
     db.delete(job)
-    db.commit()    
+    db.commit()
+
+    return None
