@@ -1,21 +1,29 @@
 from fastapi import FastAPI
+
 from app.core.config import Settings
-app = FastAPI(title=Settings.APP_NAME,
-               description="AI-powered Resume Analysis and Career Intelligence Platform",
-               version=Settings.APP_VERSION)
+from app.db.database import create_tables
 
-@app.get('/')
 
+create_tables()
+
+
+app = FastAPI(
+    title=Settings.APP_NAME,
+    description="AI-powered Resume Analysis and Career Intelligence Platform",
+    version=Settings.APP_VERSION,
+)
+
+
+@app.get("/")
 def root():
-    return{
+    return {
         "message": "AI Resume Analyzer API is running",
-        "version": Settings.APP_VERSION
-        
+        "version": Settings.APP_VERSION,
     }
 
-@app.get('/health')
 
+@app.get("/health")
 def health_check():
-    return{
-        "status": "healthy"
+    return {
+        "status": "healthy",
     }
