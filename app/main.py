@@ -2,7 +2,7 @@ from fastapi import FastAPI
 
 from app.core.config import Settings
 from app.db.database import create_tables
-
+from app.api.auth import router as auth_router
 
 create_tables()
 
@@ -12,7 +12,7 @@ app = FastAPI(
     description="AI-powered Resume Analysis and Career Intelligence Platform",
     version=Settings.APP_VERSION,
 )
-
+app.include_router(auth_router)
 
 @app.get("/")
 def root():
