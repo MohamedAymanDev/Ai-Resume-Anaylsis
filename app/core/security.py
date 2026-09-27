@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta, timezone
 
 import bcrypt
-from jose import jwt
+from jose import JWTError, jwt
 
 from app.core.config import settings
 
@@ -45,3 +45,22 @@ def create_access_token(user_id: int) -> str:
         settings.JWT_SECRET_KEY,
         algorithm=settings.JWT_ALGORITHM,
     )
+
+
+def decode_access_token(token: str) -> int:
+    try:
+        payload = jwt.decode(
+            token,
+            settings.JWT_SECRET_KEY,
+            algorithms=[settings.JWT_ALGORITHM],
+        )
+
+        user_id = payload.get("sub")
+
+        if user_id is None:
+            raise ValueError("Token does not contain user id")
+
+        return int(user_id)
+
+    except (JWTError, ValueError, TypeError):
+        raise ValueError("Invalid or expired token")

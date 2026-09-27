@@ -1,7 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
-from app.core.security import hash_password, verify_password, create_access_token
+from app.core.security import (
+    hash_password,
+    verify_password,
+    create_access_token,
+    decode_access_token,
+)
 from app.db.database import SessionLocal
 from app.db.models import User
 from app.schemas.auth import (
@@ -14,6 +21,9 @@ router = APIRouter(
     prefix="/auth",
     tags=["Authentication"],
 )
+oauth2_scheme = OAuth2PasswordBearer(
+    tokenUrl="/auth/login"
+)
 
 
 def get_db():
@@ -23,7 +33,33 @@ def get_db():
         yield db
     finally:
         db.close()
+def get_current_user(
+    token: str = Depends(oauth2_scheme),
+    db: Session = Depends(get_db),
+):
+    try:
+        user_id = decode_access_token(token)
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid or expired token",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
 
+    user = (
+        db.query(User)
+        .filter(User.id == user_id)
+        .first()
+    )
+
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="User not found",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    return user
 
 @router.post(
     "/register",
@@ -58,17 +94,18 @@ def register(
 
     return new_user
 
+
 @router.post(
     "/login",
     response_model=TokenResponse,
 )
 def login(
-    user_data: UserLogin,
+    form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db),
 ):
     user = (
         db.query(User)
-        .filter(User.email == user_data.email)
+        .filter(User.email == form_data.username)
         .first()
     )
 
@@ -79,7 +116,7 @@ def login(
         )
 
     if not verify_password(
-        user_data.password,
+        form_data.password,
         user.hashed_password,
     ):
         raise HTTPException(
@@ -93,3 +130,9 @@ def login(
         "access_token": access_token,
         "token_type": "bearer",
     }
+    
+@router.get("/me", response_model=UserResponse)
+def get_me(
+    current_user: User = Depends(get_current_user),
+):
+    return current_user    

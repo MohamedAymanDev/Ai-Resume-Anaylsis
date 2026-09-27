@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from app.core.config import Settings
 from app.db.database import create_tables
 from app.api.auth import router as auth_router
-
+from app.api.resumes import router as resumes_router
 create_tables()
 
 
@@ -13,7 +13,7 @@ app = FastAPI(
     version=Settings.APP_VERSION,
 )
 app.include_router(auth_router)
-
+app.include_router(resumes_router)
 @app.get("/")
 def root():
     return {
