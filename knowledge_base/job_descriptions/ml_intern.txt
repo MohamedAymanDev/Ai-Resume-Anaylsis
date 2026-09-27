@@ -1,0 +1,26 @@
+Job Title: Machine Learning Intern
+
+Required skills:
+- Python
+- Machine Learning
+- SQL
+- Scikit-learn
+
+Preferred skills:
+- TensorFlow
+- FastAPI
+- LangChain
+
+Responsibilities:
+- Assist in developing machine learning models.
+- Prepare and preprocess datasets.
+- Evaluate machine learning models.
+- Work with other engineers on AI projects.
+- Build experiments using Python.
+- Analyze model performance.
+
+Education:
+Computer Science, Artificial Intelligence, Data Science, Computer Engineering, or related field.
+
+Experience level:
+Internship / Entry Level

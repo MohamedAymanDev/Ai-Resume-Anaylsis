@@ -1,0 +1,31 @@
+Resume Improvement Guidelines
+
+A strong technical resume should contain:
+
+1. Professional summary
+The summary should clearly describe the candidate's technical background and target role.
+
+2. Technical skills
+List relevant programming languages, frameworks, libraries, databases, and tools.
+
+3. Projects
+Projects should describe the problem, technologies used, and measurable results when available.
+
+4. Experience
+Describe responsibilities and achievements using concise bullet points.
+
+5. Education
+Include degree, university, field of study, and graduation year.
+
+6. Certifications
+Include relevant technical certifications and training programs.
+
+7. Project descriptions
+Use action-oriented descriptions and focus on technical contributions and outcomes.
+
+Avoid:
+- Unnecessary personal information
+- Very long paragraphs
+- Unsupported claims
+- Irrelevant skills
+- Excessive formatting

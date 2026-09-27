@@ -1,0 +1,28 @@
+Skill: Python
+
+Python is a general-purpose programming language widely used in artificial intelligence, machine learning, data science, automation, and backend development.
+
+Important Python concepts for machine learning:
+- Variables and data types
+- Functions
+- Object-oriented programming
+- Lists, dictionaries, sets, and tuples
+- Exception handling
+- File handling
+- Virtual environments
+- Package management
+
+Machine learning engineers should also be familiar with common Python libraries such as:
+- NumPy
+- Pandas
+- Scikit-learn
+- TensorFlow
+- PyTorch
+
+Recommended learning path:
+1. Python fundamentals
+2. Object-oriented programming
+3. NumPy and Pandas
+4. Data preprocessing
+5. Scikit-learn
+6. Machine learning projects

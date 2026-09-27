@@ -1,0 +1,43 @@
+Skill: Machine Learning
+
+Machine Learning is a field of artificial intelligence that allows systems to learn patterns from data and make predictions or decisions.
+
+Important machine learning concepts:
+- Supervised learning
+- Unsupervised learning
+- Classification
+- Regression
+- Clustering
+- Feature engineering
+- Model evaluation
+- Cross-validation
+- Hyperparameter tuning
+
+Common machine learning algorithms:
+- Linear Regression
+- Logistic Regression
+- Decision Trees
+- Random Forest
+- Support Vector Machines
+- K-Nearest Neighbors
+- K-Means
+
+Important evaluation metrics:
+- Accuracy
+- Precision
+- Recall
+- F1-score
+- ROC-AUC
+- Mean Absolute Error
+- Mean Squared Error
+- R-squared
+
+Recommended learning path:
+1. Python
+2. NumPy and Pandas
+3. Statistics
+4. Data preprocessing
+5. Supervised learning
+6. Unsupervised learning
+7. Model evaluation
+8. End-to-end machine learning projects

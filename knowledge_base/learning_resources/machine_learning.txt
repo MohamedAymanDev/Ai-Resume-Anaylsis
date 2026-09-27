@@ -1,0 +1,19 @@
+Learning Resources: Machine Learning
+
+Python:
+Practice Python programming, data structures, functions, and object-oriented programming.
+
+Machine Learning:
+Study supervised learning, unsupervised learning, preprocessing, feature engineering, model evaluation, and hyperparameter tuning.
+
+Deep Learning:
+Study neural networks, CNNs, RNNs, LSTMs, and transformers.
+
+Generative AI:
+Study large language models, embeddings, vector databases, RAG, prompt engineering, and AI agents.
+
+Projects:
+Build practical projects using real datasets and deploy the applications using APIs or web interfaces.
+
+Portfolio:
+Publish projects on GitHub and include clear README files, technical explanations, screenshots, and live demos when possible.

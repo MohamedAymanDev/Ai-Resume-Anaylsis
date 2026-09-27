@@ -1,0 +1,25 @@
+Career Roadmap: Machine Learning Engineer
+
+Stage 1: Programming
+Learn Python fundamentals, data structures, functions, OOP, and common Python libraries.
+
+Stage 2: Mathematics and Statistics
+Learn probability, statistics, linear algebra, and basic calculus.
+
+Stage 3: Data Processing
+Learn NumPy, Pandas, data cleaning, preprocessing, feature engineering, and visualization.
+
+Stage 4: Machine Learning
+Learn supervised learning, unsupervised learning, model evaluation, cross-validation, and hyperparameter tuning.
+
+Stage 5: Deep Learning
+Learn neural networks, CNNs, RNNs, LSTMs, and transformer architectures.
+
+Stage 6: Deployment
+Learn FastAPI, Docker, APIs, cloud deployment, and model serving.
+
+Stage 7: Generative AI
+Learn LLMs, embeddings, vector databases, RAG, prompt engineering, and AI agents.
+
+Stage 8: Portfolio
+Build multiple end-to-end projects and deploy them publicly.
