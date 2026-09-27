@@ -80,3 +80,44 @@ class Resume(Base):
         default=lambda: datetime.now(timezone.utc),
         nullable=False,
     )
+    
+class ResumeAnalysis(Base):
+    __tablename__ = "resume_analyses"
+
+    id: Mapped[int] = mapped_column(
+        primary_key=True,
+        index=True,
+    )
+
+    resume_id: Mapped[int] = mapped_column(
+        ForeignKey("resumes.id"),
+        nullable=False,
+        unique=True,
+        index=True,
+    )
+
+    summary: Mapped[str] = mapped_column(
+        nullable=False,
+    )
+
+    technical_skills: Mapped[str] = mapped_column(
+        nullable=False,
+    )
+
+    soft_skills: Mapped[str] = mapped_column(
+        nullable=False,
+    )
+
+    education: Mapped[str] = mapped_column(
+        nullable=False,
+    )
+
+    experience: Mapped[str] = mapped_column(
+        nullable=False,
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=lambda: datetime.now(timezone.utc),
+        nullable=False,
+    )    

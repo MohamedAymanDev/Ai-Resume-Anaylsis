@@ -32,6 +32,20 @@ class Settings:
             "60",
         )
     )
+    LLM_PROVIDER = os.getenv(
+    "LLM_PROVIDER",
+    "groq",
+    )
+
+    LLM_MODEL = os.getenv(
+        "LLM_MODEL",
+        "openai/gpt-oss-20b",
+    )
+
+    LLM_API_KEY = os.getenv(
+        "LLM_API_KEY",
+        "",
+    )
 
 
 settings = Settings()
