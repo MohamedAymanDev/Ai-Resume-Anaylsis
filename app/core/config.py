@@ -1,14 +1,21 @@
 import os
+
 from dotenv import load_dotenv
+
 
 load_dotenv()
 
+
 class Settings:
-    APP_NAME = os.getenv("APP_NAME",'AI Resume Analyaer')
-    APP_VERSION = os.getenv('APP_VERSION','0.1.0')
-    DEBUG = os.getenv('DEBUG','flase').lower()=='true'
-    
-    DATABASE_URL = os.getenv('DATABASE_URL','sqlite:///./data/app.db')
+    APP_NAME = os.getenv("APP_NAME", "AI Resume Analyzer")
+    APP_VERSION = os.getenv("APP_VERSION", "0.1.0")
+    DEBUG = os.getenv("DEBUG", "false").lower() == "true"
+
+    DATABASE_URL = os.getenv(
+        "DATABASE_URL",
+        "sqlite:///./data/app.db",
+    )
+
     JWT_SECRET_KEY = os.getenv(
         "JWT_SECRET_KEY",
         "development-secret-key",
@@ -24,6 +31,7 @@ class Settings:
             "JWT_ACCESS_TOKEN_EXPIRE_MINUTES",
             "60",
         )
-)
+    )
 
-setting = Settings()    
+
+settings = Settings()
