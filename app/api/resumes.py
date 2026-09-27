@@ -8,6 +8,7 @@ from app.api.auth import get_current_user, get_db
 from app.db.models import Resume, User
 from app.schemas.resume import ResumeResponse
 
+from app.services.resume_parser import extract_resume_text
 
 router = APIRouter(
     prefix="/resumes",
@@ -21,6 +22,7 @@ MAX_FILE_SIZE = 8 * 1024 * 1024
 
 
 @router.post(
+    
     "/upload",
     response_model=ResumeResponse,
     status_code=status.HTTP_201_CREATED,
@@ -56,13 +58,18 @@ async def upload_resume(
 
     with open(file_path, "wb") as buffer:
         buffer.write(file_content)
-
+    
+    extracted_text = extract_resume_text(
+    str(file_path),
+    file_extension.replace(".", ""),
+    )
     resume = Resume(
-        user_id=current_user.id,
-        filename=file.filename,
-        file_path=str(file_path),
-        file_type=file_extension.replace(".", ""),
-        status="uploaded",
+    user_id=current_user.id,
+    filename=file.filename,
+    file_path=str(file_path),
+    file_type=file_extension.replace(".", ""),
+    extracted_text=extracted_text,
+    status="parsed",
     )
 
     db.add(resume)

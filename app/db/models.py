@@ -62,6 +62,12 @@ class Resume(Base):
         String(50),
         nullable=False,
     )
+    extracted_text: Mapped[str | None] = mapped_column(
+    nullable=True,
+    )
+
+
+
 
     status: Mapped[str] = mapped_column(
         String(50),

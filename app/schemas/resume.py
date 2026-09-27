@@ -13,3 +13,11 @@ class ResumeResponse(BaseModel):
     model_config = {
         "from_attributes": True
     }
+
+
+class ResumeAnalysis(BaseModel):
+    summary: str
+    technical_skills: list[str]
+    soft_skills: list[str]
+    education: list[str]
+    experience: list[str]
